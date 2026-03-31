@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+/* Cocon Next Arabic – Arabic + Latin (English), applied to body and text */
+@font-face {
+  font-family: "Cocon Next Arabic";
+  src: url("https://db.onlinewebfonts.com/t/4ce5fad2df30ef4ed5ee61f579ee24b7.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/4ce5fad2df30ef4ed5ee61f579ee24b7.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cocon Next Arabic";
+  src: url("https://db.onlinewebfonts.com/t/b66fc2e5aebf8caea5968b38f84ce785.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/b66fc2e5aebf8caea5968b38f84ce785.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 182 91% 41%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 182 91% 41%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 182 91% 41%;
+
+    --primary: 182 91% 41%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 182 40% 92%;
+    --secondary-foreground: 182 91% 35%;
+
+    --muted: 182 25% 95%;
+    --muted-foreground: 182 60% 40%;
+
+    --accent: 182 91% 41%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 182 60% 60%;
+    --input: 182 60% 60%;
+    --ring: 182 91% 41%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 182 91% 35%;
+    --sidebar-primary: 182 91% 41%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 182 40% 92%;
+    --sidebar-accent-foreground: 182 91% 35%;
+    --sidebar-border: 182 60% 60%;
+    --sidebar-ring: 182 91% 41%;
+
+    /* Custom retro tokens */
+    --retro-teal: 182 91% 41%;
+    --retro-teal-light: 182 80% 50%;
+    --retro-teal-dark: 182 91% 30%;
+    --retro-white: 0 0% 100%;
+    --retro-cream: 40 30% 97%;
+  }
+
+  .dark {
+    --background: 175 80% 8%;
+    --foreground: 0 0% 100%;
+    --card: 175 80% 12%;
+    --card-foreground: 0 0% 100%;
+    --popover: 175 80% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 175 60% 50%;
+    --primary-foreground: 175 80% 8%;
+    --secondary: 175 50% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 175 50% 15%;
+    --muted-foreground: 175 30% 70%;
+    --accent: 175 60% 50%;
+    --accent-foreground: 175 80% 8%;
+    --border: 175 50% 20%;
+    --input: 175 50% 20%;
+    --ring: 175 60% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Cocon Next Arabic", sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Pacifico', cursive;
+    color: hsl(var(--primary));
+  }
+}
+
+@layer utilities {
+  .font-script {
+    font-family: 'Pacifico', cursive;
+  }
+
+  .font-rounded,
+  .font-arabic {
+    font-family: "Cocon Next Arabic", sans-serif;
+  }
+
+  .retro-border-top {
+    position: relative;
+    padding-top: 16px;
+  }
+
+  .retro-border-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background-image:
+      linear-gradient(45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--primary)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--primary)) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  }
+
+  .retro-border-bottom {
+    position: relative;
+    padding-bottom: 16px;
+  }
+
+  .retro-border-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background-image:
+      linear-gradient(45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--primary)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--primary)) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  }
+
+  .retro-ornament {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .retro-ornament::before,
+  .retro-ornament::after {
+    content: '';
+    flex: 1;
+    height: 16px;
+    background-image:
+      linear-gradient(45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--primary)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--primary)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--primary)) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-delay-100 { animation-delay: 0.1s; }
+  .animate-delay-200 { animation-delay: 0.2s; }
+  .animate-delay-300 { animation-delay: 0.3s; }
+  .animate-delay-400 { animation-delay: 0.4s; }
+
+  /* Palm tree wind sway – rotation from base */
+  @keyframes sway-wind {
+    0%, 100% { transform: rotate(-2.5deg); }
+    50% { transform: rotate(2.5deg); }
+  }
+  .animate-sway-wind {
+    animation: sway-wind 4s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  .animate-sway-wind-slow {
+    animation: sway-wind 6s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  /* Ringing pulse on text (e.g. Menu Drinkat) */
+  @keyframes text-ring-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.04); }
+  }
+  .animate-text-ring-pulse {
+    animation: text-ring-pulse 2s ease-in-out infinite;
+  }
+
+  /* Shake every 2s – horizontal + small rotation (no full rotation) */
+  @keyframes category-shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    5% { transform: translateX(-3px) rotate(-4deg); }
+    10% { transform: translateX(3px) rotate(4deg); }
+    15% { transform: translateX(-3px) rotate(-3deg); }
+    20% { transform: translateX(3px) rotate(3deg); }
+    25% { transform: translateX(0) rotate(0deg); }
+  }
+  .animate-category-shake {
+    animation: category-shake 2s ease-in-out infinite;
+  }
+
+  /* Hero buttons – black, 70% transparent */
+  .hero-btn-checkerboard {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .hero-btn-checkerboard:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+}
