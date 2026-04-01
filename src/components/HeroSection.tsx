@@ -1,8 +1,11 @@
 import { useRef, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import drinkatLogo from "@/assets/drinkat-logo.png";
 import WarpedCheckerboard from "./WarpedCheckerboard";
 import { playfulHoverTap, riseIn, sectionStagger } from "@/lib/motion";
+
+const MotionLink = motion(Link);
 
 const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -70,14 +73,14 @@ const HeroSection = () => {
         animate="visible"
         variants={sectionStagger(reducedMotion, 0.25)}
       >
-        <motion.a
-          href="#menu"
+        <MotionLink
+          to="/menu"
           className="hero-btn-checkerboard block w-full py-2.5 sm:py-3 transition-colors no-underline text-center font-rounded font-bold text-lg sm:text-xl md:text-2xl uppercase tracking-wider text-white"
           variants={riseIn(reducedMotion, 20)}
           {...playfulHoverTap(reducedMotion)}
         >
           Menu Drinkat <span className="font-arabic normal-case" dir="rtl">المنيو</span>
-        </motion.a>
+        </MotionLink>
         <motion.a
           href="#visit-us"
           className="hero-btn-checkerboard block w-full py-2.5 sm:py-3 transition-colors no-underline text-center font-rounded font-bold text-lg sm:text-xl md:text-2xl uppercase tracking-wider text-white"

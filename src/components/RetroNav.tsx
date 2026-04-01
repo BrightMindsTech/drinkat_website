@@ -1,9 +1,18 @@
 import drinkatLogo from "@/assets/drinkat-logo.png";
 import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { playfulHoverTap, riseIn, sectionStagger } from "@/lib/motion";
 
+const MotionLink = motion(Link);
+
+const navItems: { label: string; to: string }[] = [
+  { label: "Home", to: "/#home" },
+  { label: "Menu", to: "/menu" },
+  { label: "About", to: "/#about" },
+  { label: "Visit Us", to: "/#visit-us" },
+];
+
 const RetroNav = () => {
-  const navItems = ["Home", "Menu", "About", "Visit Us"];
   const reducedMotion = useReducedMotion();
 
   return (
@@ -14,19 +23,19 @@ const RetroNav = () => {
       variants={sectionStagger(reducedMotion, 0.05)}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <motion.a href="#home" variants={riseIn(reducedMotion, 18)} {...playfulHoverTap(reducedMotion)}>
+        <MotionLink to="/#home" variants={riseIn(reducedMotion, 18)} {...playfulHoverTap(reducedMotion)}>
           <img src={drinkatLogo} alt="Drinkat logo" className="h-12 md:h-14 w-auto" />
-        </motion.a>
+        </MotionLink>
         <motion.ul className="hidden md:flex items-center gap-8" variants={riseIn(reducedMotion, 18)}>
           {navItems.map((item) => (
-            <li key={item}>
-              <motion.a
-                href={`#${item.toLowerCase().replace(" ", "-")}`}
+            <li key={item.label}>
+              <MotionLink
+                to={item.to}
                 className="font-rounded font-semibold text-primary tracking-wide uppercase text-sm hover:opacity-70 transition-opacity"
                 {...playfulHoverTap(reducedMotion)}
               >
-                {item}
-              </motion.a>
+                {item.label}
+              </MotionLink>
             </li>
           ))}
         </motion.ul>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CupSoda, Beef } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, A11y } from "swiper/modules";
@@ -14,50 +14,8 @@ import {
   sectionStagger,
   sectionViewport,
 } from "@/lib/motion";
-import {
-  drinkCategories,
-  foodCategories,
-  extras,
-  sides,
-  featuredItems,
-  type MenuItem,
-  type Category,
-  type FeaturedItem,
-} from "./menu/menuData";
-
-/* ───────── PRICE BADGES ───────── */
-
-function PriceBadges({ item }: { item: MenuItem }) {
-  const sizeLabels: Record<string, string> = {
-    S: "صغير",
-    M: "وسط",
-    L: "كبير",
-  };
-
-  if (item.prices.length === 1) {
-    const p = item.prices[0];
-    return (
-      <div className="font-rounded text-sm font-bold text-white">
-        {p.price} <span className="text-xs font-normal">JD</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex justify-center gap-3">
-      {item.prices.map((p, i) => (
-        <div key={i} className="flex flex-col items-center">
-          <span className="font-arabic text-[10px] text-white/80 mb-0.5">
-            {sizeLabels[p.label] || p.label}
-          </span>
-          <span className="font-rounded text-sm font-bold text-white">
-            {p.price} <span className="text-[10px] font-normal">JD</span>
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
+import { allCategories, featuredItems, type FeaturedItem } from "./menu/menuData";
+import { CategoryGrid } from "./menu/CategoryGrid";
 
 const FEATURED_INTERVAL_MS = 2500;
 
@@ -136,52 +94,6 @@ function FeaturedCarousel() {
   );
 }
 
-function CategoryBlock({ cat, reducedMotion }: { cat: Category; reducedMotion: boolean }) {
-  return (
-    <motion.div className="mb-6 last:mb-0" variants={riseIn(reducedMotion, 16)}>
-      <h3 className="text-lg font-script text-primary-foreground mb-2">
-        {cat.title} · <span className="font-arabic">{cat.titleAr}</span>
-      </h3>
-      <div className="space-y-0 border border-primary-foreground/20 rounded-xl overflow-hidden bg-primary-foreground/10">
-        {cat.items.map((item, idx) => (
-          <motion.div
-            key={item.name}
-            className="flex items-center justify-between px-4 py-2.5 border-b border-primary-foreground/10 last:border-0"
-            variants={riseIn(reducedMotion, 12 + idx)}
-          >
-            <span className={`font-semibold text-primary-foreground text-sm ${/[\u0600-\u06FF]/.test(item.name) ? "font-arabic" : "font-rounded"}`}>{item.name}</span>
-            <PriceBadges item={item} />
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-function SimpleListBlock({ title, titleAr, items, reducedMotion }: { title: string; titleAr: string; items: MenuItem[]; reducedMotion: boolean }) {
-  return (
-    <motion.div className="mb-6 last:mb-0" variants={riseIn(reducedMotion, 16)}>
-      <h3 className="text-lg font-script text-primary-foreground mb-2">
-        {title} · <span className="font-arabic">{titleAr}</span>
-      </h3>
-      <div className="space-y-0 border border-primary-foreground/20 rounded-xl overflow-hidden bg-primary-foreground/10">
-        {items.map((item, idx) => (
-          <motion.div
-            key={item.name}
-            className="flex items-center justify-between px-4 py-2.5 border-b border-primary-foreground/10 last:border-0"
-            variants={riseIn(reducedMotion, 12 + idx)}
-          >
-            <span className={`font-semibold text-primary-foreground text-sm ${/[\u0600-\u06FF]/.test(item.name) ? "font-arabic" : "font-rounded"}`}>{item.name}</span>
-            <PriceBadges item={item} />
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-/* ───────── MAIN COMPONENT ───────── */
-
 const MenuSection = () => {
   const reducedMotion = useReducedMotion();
 
@@ -194,7 +106,6 @@ const MenuSection = () => {
       viewport={sectionViewport}
       variants={sectionStagger(reducedMotion, 0.06)}
     >
-      {/* Bright top line – stands out from menu */}
       <div
         className="absolute top-0 left-0 right-0 z-20 h-5 w-full"
         style={{
@@ -209,7 +120,6 @@ const MenuSection = () => {
           boxShadow: "0 2px 8px rgba(255,255,255,0.3)",
         }}
       />
-      {/* Palm trees – top of section, wind sway, whiter */}
       <div className="absolute top-0 left-0 -translate-x-1/3 sm:-translate-x-1/4 md:-translate-x-1/6 pointer-events-none z-[1]">
         <img src={palmTree} alt="" className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-auto opacity-50 md:opacity-60 animate-sway-wind drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [filter:brightness(0)_invert(1)]" />
       </div>
@@ -230,51 +140,24 @@ const MenuSection = () => {
         <FeaturedCarousel />
 
         <motion.h3 className="font-rounded font-bold text-primary-foreground/90 text-sm uppercase tracking-widest text-center mb-6" variants={riseIn(reducedMotion, 16)}>
-          Full menu
+          Browse by category
         </motion.h3>
 
-        {/* Mobile: full menu visible (no accordion). Desktop: 2-col grid */}
-        <motion.div className="md:hidden space-y-8" variants={sectionStagger(reducedMotion, 0.1)}>
-          <div>
-            <motion.h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2" variants={riseIn(reducedMotion, 14)} {...playfulHoverTap(reducedMotion)}>
-              <CupSoda className="w-5 h-5" /> Drinks
-            </motion.h4>
-            {drinkCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} reducedMotion={reducedMotion} />
-            ))}
-          </div>
-          <div>
-            <motion.h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2" variants={riseIn(reducedMotion, 14)} {...playfulHoverTap(reducedMotion)}>
-              <Beef className="w-5 h-5" /> Food
-            </motion.h4>
-            {foodCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} reducedMotion={reducedMotion} />
-            ))}
-            <SimpleListBlock title="Extras" titleAr="أشياء زيادة" items={extras} reducedMotion={reducedMotion} />
-            <SimpleListBlock title="Sides" titleAr="أشياء سوفت" items={sides} reducedMotion={reducedMotion} />
-          </div>
+        <motion.div
+          className="rounded-3xl bg-white/95 border border-white/40 shadow-lg px-4 py-8 md:px-8 md:py-10 max-w-6xl mx-auto"
+          variants={riseIn(reducedMotion, 12)}
+        >
+          <CategoryGrid categories={allCategories} embedded />
         </motion.div>
 
-        <motion.div className="hidden md:grid md:grid-cols-2 gap-x-10 gap-y-8 max-w-5xl mx-auto" variants={sectionStagger(reducedMotion, 0.12)}>
-          <div>
-            <motion.h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2" variants={riseIn(reducedMotion, 14)} {...playfulHoverTap(reducedMotion)}>
-              <CupSoda className="w-5 h-5" /> Drinks
-            </motion.h4>
-            {drinkCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} reducedMotion={reducedMotion} />
-            ))}
-          </div>
-          <div>
-            <motion.h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2" variants={riseIn(reducedMotion, 14)} {...playfulHoverTap(reducedMotion)}>
-              <Beef className="w-5 h-5" /> Food
-            </motion.h4>
-            {foodCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} reducedMotion={reducedMotion} />
-            ))}
-            <SimpleListBlock title="Extras" titleAr="أشياء زيادة" items={extras} reducedMotion={reducedMotion} />
-            <SimpleListBlock title="Sides" titleAr="أشياء سوفت" items={sides} reducedMotion={reducedMotion} />
-          </div>
-        </motion.div>
+        <motion.p className="text-center mt-8" variants={riseIn(reducedMotion, 12)}>
+          <Link
+            to="/menu"
+            className="font-rounded font-semibold text-primary-foreground/90 text-sm uppercase tracking-widest underline underline-offset-4 hover:text-primary-foreground transition-colors"
+          >
+            View full menu page
+          </Link>
+        </motion.p>
       </div>
     </motion.section>
   );
