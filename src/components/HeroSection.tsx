@@ -1,10 +1,12 @@
 import { useRef, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import drinkatLogo from "@/assets/drinkat-logo.png";
-import palmTree from "@/assets/palm-tree.png";
 import WarpedCheckerboard from "./WarpedCheckerboard";
+import { playfulHoverTap, riseIn, sectionStagger } from "@/lib/motion";
 
 const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -38,35 +40,53 @@ const HeroSection = () => {
       </div>
       <WarpedCheckerboard />
 
-      <div className="container mx-auto px-6 text-center relative z-10">
+      <motion.div
+        className="container mx-auto px-6 text-center relative z-10"
+        initial="hidden"
+        animate="visible"
+        variants={sectionStagger(reducedMotion, 0.08)}
+      >
         {/* Hero Logo – blur follows logo shape */}
-        <div className="max-w-6xl mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-100">
+        <motion.div className="max-w-6xl mx-auto mb-4" variants={riseIn(reducedMotion, 30)}>
           <img
             src={drinkatLogo}
             alt="Drinkat coffee shop logo"
             className="w-full h-auto"
           />
-        </div>
-        <p className="font-arabic font-semibold text-primary text-2xl md:text-3xl mb-10 opacity-0 animate-fade-in-up animate-delay-200" dir="rtl">
+        </motion.div>
+        <motion.p
+          className="font-arabic font-semibold text-primary text-2xl md:text-3xl mb-10"
+          dir="rtl"
+          variants={riseIn(reducedMotion, 24)}
+        >
           درينك ناو !
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {/* Full-width buttons – outside container so they span the full viewport */}
-      <div className="flex flex-col opacity-0 animate-fade-in-up animate-delay-400 w-full relative z-10 mt-10 md:mt-14">
-        <a
+      <motion.div
+        className="flex flex-col w-full relative z-10 mt-10 md:mt-14"
+        initial="hidden"
+        animate="visible"
+        variants={sectionStagger(reducedMotion, 0.25)}
+      >
+        <motion.a
           href="#menu"
           className="hero-btn-checkerboard block w-full py-2.5 sm:py-3 transition-colors no-underline text-center font-rounded font-bold text-lg sm:text-xl md:text-2xl uppercase tracking-wider text-white"
+          variants={riseIn(reducedMotion, 20)}
+          {...playfulHoverTap(reducedMotion)}
         >
           Menu Drinkat <span className="font-arabic normal-case" dir="rtl">المنيو</span>
-        </a>
-        <a
+        </motion.a>
+        <motion.a
           href="#visit-us"
           className="hero-btn-checkerboard block w-full py-2.5 sm:py-3 transition-colors no-underline text-center font-rounded font-bold text-lg sm:text-xl md:text-2xl uppercase tracking-wider text-white"
+          variants={riseIn(reducedMotion, 20)}
+          {...playfulHoverTap(reducedMotion)}
         >
           our branches <span className="font-arabic normal-case" dir="rtl">فروعنا</span>
-        </a>
-      </div>
+        </motion.a>
+      </motion.div>
     </section>
   );
 };

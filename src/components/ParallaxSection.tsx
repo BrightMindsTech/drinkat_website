@@ -37,20 +37,20 @@ const ParallaxSection = () => {
         <img
           src="/parallex-photo1.jpeg"
           alt=""
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-center object-contain"
         />
       </div>
       {/* Parallax layer – moves upward on scroll, sized to cover on all viewports */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* <div className="absolute inset-0 overflow-hidden">
         <img
           src="/parallex-photo2.jpeg"
           alt=""
-          className="absolute left-1/2 top-1/2 h-[130%] w-[130%] min-h-full min-w-full -translate-x-1/2 object-cover object-center"
+          className="absolute left-1/2 top-1/2 h-[50%] w-[130%]  min-w-full -translate-x-1/2 object-contain object-center"
           style={{
             transform: `translate(-50%, calc(-50% - ${offsetY}px))`,
           }}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

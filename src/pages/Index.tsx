@@ -4,6 +4,7 @@ import ParallaxSection from "@/components/ParallaxSection";
 import MenuSection from "@/components/MenuSection";
 import AboutSection from "@/components/AboutSection";
 import VisitSection from "@/components/VisitSection";
+import ContactFab from "@/components/ContactFab";
 import RetroFooter from "@/components/RetroFooter";
 
 const Index = () => {
@@ -17,6 +18,7 @@ const Index = () => {
         <AboutSection />
         <VisitSection />
       </main>
+      <ContactFab />
       <RetroFooter />
     </div>
   );

@@ -16,7 +16,7 @@ const RetroFooter = () => {
           </p>
         </div>
 
-        <div className="flex justify-center gap-8 mb-8">
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-8">
           {["Home", "Menu", "About", "Visit Us"].map((item) => (
             <a
               key={item}
