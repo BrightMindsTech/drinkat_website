@@ -37,6 +37,9 @@ export function MenuProductCard({ item, className }: MenuProductCardProps) {
         >
           {item.name}
         </h2>
+        <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3 font-rounded">
+          {item.description}
+        </p>
         <div className="mt-auto pt-1 border-t border-border/60">
           <PriceBadges item={item} variant="onCard" />
         </div>
