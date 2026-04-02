@@ -20,7 +20,7 @@ const RetroFooter = () => {
         <div className="my-8">
           <img src={drinkatLogo} alt="Drinkat logo" className="h-16 w-auto mx-auto" />
           <p className="text-primary/60 text-sm mt-2 tracking-wider uppercase">
-            <span className="font-arabic">درينك ناو</span> <span className="font-rounded">— Drink Now since 2019</span>
+            {/* <span className="font-arabic">درينك ناو</span> <span className="font-rounded">— Drink Now since 2019</span> */}
           </p>
         </div>
 
