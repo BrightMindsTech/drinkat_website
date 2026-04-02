@@ -19,9 +19,13 @@ export function MenuProductCard({ item, className }: MenuProductCardProps) {
         className,
       )}
     >
-      <div className="relative aspect-[4/3] bg-muted/70 border-b border-border/60 flex items-center justify-center p-4">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted/70 border-b border-border/60 flex items-center justify-center">
         {item.imageSrc ? (
-          <img src={item.imageSrc} alt={item.name} className="max-h-full max-w-full object-contain object-center" />
+          <img
+            src={item.imageSrc}
+            alt={item.name}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
         ) : (
           <div className="flex flex-col items-center gap-2 text-muted-foreground/50">
             <CupSoda className="w-14 h-14" strokeWidth={1.25} aria-hidden />
