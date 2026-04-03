@@ -39,13 +39,14 @@ const RetroNav = () => {
             </li>
           ))}
         </motion.ul>
-        <motion.button
-          className="font-rounded font-bold text-xs md:text-sm uppercase tracking-wider bg-primary text-primary-foreground px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap"
+        <MotionLink
+          to="/menu"
+          className="font-rounded font-bold text-xs md:text-sm uppercase tracking-wider bg-primary text-primary-foreground px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap inline-block"
           variants={riseIn(reducedMotion, 18)}
           {...playfulHoverTap(reducedMotion)}
         >
           order drinkat
-        </motion.button>
+        </MotionLink>
       </div>
     </motion.nav>
   );

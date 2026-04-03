@@ -8,104 +8,98 @@ import {
   sectionStagger,
   sectionViewport,
 } from "@/lib/motion";
-import { CupViewer } from "./3DComponents/CupViewer";
-import { Center, Environment, Html, OrbitControls, PerspectiveCamera, Preload, View } from "@react-three/drei";
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
 
 const AboutSection = () => {
   const reducedMotion = useReducedMotion();
 
   return (
-    <>
-      {/* Used For Inline 3D Elements */}
-      <Canvas
-        eventSource={document.getElementById("root") ?? undefined}
-        gl={{ alpha: true, antialias: true }}
-        style={{
-          position: "fixed",
-          inset: 0,
-          overflow: "hidden",
-          pointerEvents: "none",
-          zIndex: 20,
-        }}
-      >
-        <View.Port />
-        {/* <EffectComposer multisampling={0}>
-          <Bloom
-            kernelSize={KernelSize.LARGE}
-            luminanceThreshold={0}
-            luminanceSmoothing={0}
-            intensity={0.5}
+    <motion.section
+      id="about"
+      className="bg-background py-16 md:py-24 relative"
+      initial="hidden"
+      whileInView="visible"
+      viewport={sectionViewport}
+      variants={sectionStagger(reducedMotion, 0.08)}
+    >
+      <WarpedCheckerboard />
+      <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
+        <RetroBorder />
+
+        <motion.div className="my-8" variants={riseIn(reducedMotion, 14)}>
+          <StarOrnament reducedMotion={reducedMotion} />
+        </motion.div>
+
+        <motion.h2
+          className="font-script text-4xl md:text-6xl text-primary mb-6"
+          variants={riseIn(reducedMotion, 20)}
+        >
+          Our Story
+        </motion.h2>
+
+        <motion.p
+          className="font-rounded text-primary/80 text-lg md:text-xl leading-relaxed mb-6"
+          variants={riseIn(reducedMotion, 18)}
+        >
+          Since 2019, Drinkat has been fueling Jordan's coffee lovers with bold
+          flavors and a warm, welcoming atmosphere. What started as a single
+          café has grown into a beloved local brand with three branches across
+          the kingdom.
+        </motion.p>
+
+        <motion.p
+          className="font-rounded text-primary/80 text-lg md:text-xl leading-relaxed mb-10"
+          variants={riseIn(reducedMotion, 18)}
+        >
+          We craft every cup with care, serve our food fresh daily, and treat
+          every customer like family. wherever you find us, you'll find great
+          coffee and good vibes.
+        </motion.p>
+
+        <motion.div
+          className="grid grid-cols-3 gap-8 my-12"
+          variants={sectionStagger(reducedMotion, 0.1)}
+        >
+          <StatBlock
+            number="5+"
+            label="Years Brewing"
+            reducedMotion={reducedMotion}
           />
-        </EffectComposer> */}
-        <Preload all />
-      </Canvas>
+          <StatBlock
+            number="3"
+            label="Branches"
+            reducedMotion={reducedMotion}
+          />
+          <StatBlock
+            number="1"
+            label="Big Family"
+            reducedMotion={reducedMotion}
+          />
+        </motion.div>
 
-      <motion.section
-        id="about"
-        className="bg-background py-16 md:py-24 relative"
-        initial="hidden"
-        whileInView="visible"
-        viewport={sectionViewport}
-        variants={sectionStagger(reducedMotion, 0.08)}
-      >
-        <WarpedCheckerboard />
-        <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
+        <motion.div className="my-8" variants={riseIn(reducedMotion, 12)}>
           <RetroBorder />
-
-          <motion.div className="my-8" variants={riseIn(reducedMotion, 14)}>
-            <StarOrnament reducedMotion={reducedMotion} />
-          </motion.div>
-
-          <motion.h2 className="font-script text-4xl md:text-6xl text-primary mb-6" variants={riseIn(reducedMotion, 20)}>
-            Our Story
-          </motion.h2>
-
-          <motion.p className="font-rounded text-primary/80 text-lg md:text-xl leading-relaxed mb-6" variants={riseIn(reducedMotion, 18)}>
-            Since 2019, Drinkat has been fueling Jordan's coffee lovers with bold flavors and a warm,
-            welcoming atmosphere. What started as a single café has grown into a beloved local brand
-            with three branches across the kingdom.
-          </motion.p>
-
-          <motion.p className="font-rounded text-primary/80 text-lg md:text-xl leading-relaxed mb-10" variants={riseIn(reducedMotion, 18)}>
-            We craft every cup with care, serve our food fresh daily, and treat every customer like family.
-            wherever you find us, you'll find great coffee and good vibes.
-          </motion.p>
-
-          <motion.div className="grid grid-cols-3 gap-8 my-12" variants={sectionStagger(reducedMotion, 0.1)}>
-            <StatBlock number="5+" label="Years Brewing" reducedMotion={reducedMotion} />
-            <StatBlock number="3" label="Branches" reducedMotion={reducedMotion} />
-            <StatBlock number="1" label="Big Family" reducedMotion={reducedMotion} />
-          </motion.div>
-
-          <motion.div className="my-8" variants={riseIn(reducedMotion, 12)}>
-            <RetroBorder />
-          </motion.div>
-
-          <Suspense fallback={null}>
-            <View className="relative w-[250px] h-[250px] mx-auto">
-              <PerspectiveCamera makeDefault position={[0, 0, 2.2]} fov={45}  />
-              <ambientLight intensity={0.6} />
-              <directionalLight position={[2, 2, 2]} intensity={1.2} />
-              <Environment preset="sunset" />
-              <OrbitControls enableZoom={false}  />
-              <Center>
-                <CupViewer />
-              </Center>
-            </View>
-          </Suspense>
-
-        </div>
-      </motion.section>
-    </>
-
+        </motion.div>
+      </div>
+    </motion.section>
   );
 };
 
-const StatBlock = ({ number, label, reducedMotion }: { number: string; label: string; reducedMotion: boolean }) => (
-  <motion.div variants={riseIn(reducedMotion, 14)} {...playfulHoverTap(reducedMotion)}>
-    <div className="font-script text-3xl md:text-5xl text-primary">{number}</div>
+const StatBlock = ({
+  number,
+  label,
+  reducedMotion,
+}: {
+  number: string;
+  label: string;
+  reducedMotion: boolean;
+}) => (
+  <motion.div
+    variants={riseIn(reducedMotion, 14)}
+    {...playfulHoverTap(reducedMotion)}
+  >
+    <div className="font-script text-3xl md:text-5xl text-primary">
+      {number}
+    </div>
     <div className="font-rounded font-semibold text-primary/60 text-xs uppercase tracking-widest mt-1">
       {label}
     </div>

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import RetroNav from "@/components/RetroNav";
 import RetroFooter from "@/components/RetroFooter";
 import ContactFab from "@/components/ContactFab";
@@ -16,6 +18,13 @@ const MenuPage = () => {
               Browse by category
             </p>
           </div>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 font-rounded font-semibold text-primary text-sm uppercase tracking-wide hover:opacity-80 transition-opacity mb-4 md:mb-5"
+          >
+            <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden />
+            Back to home
+          </Link>
           <div className="rounded-3xl bg-white border border-border/60 shadow-sm px-4 py-8 md:px-8 md:py-12">
             <CategoryGrid categories={allCategories} />
           </div>
