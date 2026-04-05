@@ -155,12 +155,12 @@ const MenuSection = () => {
           >
             Menu Drinkat
           </motion.h2>
-          <motion.p
+          {/* <motion.p
             className="font-rounded font-semibold text-primary-foreground/80 uppercase tracking-[0.2em] text-sm"
             variants={riseIn(reducedMotion, 14)}
           >
             Made fresh, served with a smile
-          </motion.p>
+          </motion.p> */}
         </motion.div>
 
         <FeaturedCarousel />
