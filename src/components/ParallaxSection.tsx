@@ -1,4 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  Center,
+  Environment,
+  OrbitControls,
+  PerspectiveCamera,
+  Preload,
+  View,
+} from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { CupViewer } from "./3DComponents/CupViewer";
+import WarpedCheckerboard from "./WarpedCheckerboard";
+import RetroBorder from "./RetroBorder";
 
 const PARALLAX_SPEED = 0.4; // Image moves at 40% of scroll speed
 
@@ -37,7 +49,7 @@ const ParallaxSection = () => {
         <img
           src="/parallex-photo1.jpeg"
           alt=""
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-cover md:object-contain object-center"
         />
       </div>
       {/* Parallax layer – moves upward on scroll, sized to cover on all viewports */}
@@ -45,7 +57,7 @@ const ParallaxSection = () => {
         <img
           src="/parallex-photo2.jpeg"
           alt=""
-          className="absolute left-1/2 top-1/2 h-[130%] w-[130%] min-h-full min-w-full -translate-x-1/2 object-cover object-center"
+          className="absolute left-1/2 top-1/2 h-[130%] w-[130%] min-h-full min-w-full -translate-x-1/2 object-cover object-center md:h-full"
           style={{
             transform: `translate(-50%, calc(-50% - ${offsetY}px))`,
           }}

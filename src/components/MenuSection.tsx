@@ -1,153 +1,120 @@
-import { useState, useEffect } from "react";
-import { CupSoda, Beef } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, A11y } from "swiper/modules";
+import type { Swiper as SwiperInstance } from "swiper";
+import "swiper/css";
 import palmTree from "@/assets/palm-tree.png";
 import WarpedCheckerboard from "./WarpedCheckerboard";
 import {
-  drinkCategories,
-  foodCategories,
-  extras,
-  sides,
-  featuredItems,
-  type MenuItem,
-  type Category,
-  type FeaturedItem,
-} from "./menu/menuData";
-
-/* ───────── PRICE BADGES ───────── */
-
-function PriceBadges({ item }: { item: MenuItem }) {
-  const sizeLabels: Record<string, string> = {
-    S: "صغير",
-    M: "وسط",
-    L: "كبير",
-  };
-
-  if (item.prices.length === 1) {
-    const p = item.prices[0];
-    return (
-      <div className="font-rounded text-sm font-bold text-white">
-        {p.price} <span className="text-xs font-normal">JD</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex justify-center gap-3">
-      {item.prices.map((p, i) => (
-        <div key={i} className="flex flex-col items-center">
-          <span className="font-arabic text-[10px] text-white/80 mb-0.5">
-            {sizeLabels[p.label] || p.label}
-          </span>
-          <span className="font-rounded text-sm font-bold text-white">
-            {p.price} <span className="text-[10px] font-normal">JD</span>
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
+  playfulHoverTap,
+  riseIn,
+  scaleIn,
+  sectionStagger,
+  sectionViewport,
+} from "@/lib/motion";
+import { allCategories } from "./menu/menuData";
+import { CategoryGrid } from "./menu/CategoryGrid";
 
 const FEATURED_INTERVAL_MS = 2500;
 
 /** Local featured photos from public folder (cycle through 4 images for 7 items) */
-const FEATURED_IMAGE_NAMES = ["featured-item1.jpeg", "featured-item2.jpeg", "featured-item3.jpeg", "featured-item4.jpeg"];
-function getFeaturedImageUrl(_item: FeaturedItem, index: number): string {
-  const name = FEATURED_IMAGE_NAMES[index % FEATURED_IMAGE_NAMES.length];
-  return `/${name}`;
-}
+const FEATURED_IMAGE_NAMES = [
+  "/FeaturedItems/Featured1.jpg",
+  "/FeaturedItems/Featured5.jpg",
+  "/FeaturedItems/Featured6.jpg",
+  "/FeaturedItems/Featured2.jpg",
+  "/FeaturedItems/Featured3.jpg",
+  "/FeaturedItems/Featured4.jpg",
+];
 
 function FeaturedCarousel() {
-  const [index, setIndex] = useState(0);
-  const total = featuredItems.length;
-
-  useEffect(() => {
-    if (total <= 1) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % total), FEATURED_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [total]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+  const total = FEATURED_IMAGE_NAMES.length;
+  const reducedMotion = useReducedMotion();
 
   return (
-    <div className="w-full max-w-md mx-auto mb-10 md:mb-12">
-      <p className="font-rounded font-semibold text-primary-foreground/80 text-xs uppercase tracking-widest text-center mb-3">
+    <motion.div
+      className="w-full max-w-md mx-auto mb-10 md:mb-12"
+      initial="hidden"
+      whileInView="visible"
+      viewport={sectionViewport}
+      variants={sectionStagger(reducedMotion)}
+    >
+      <motion.p
+        className="font-rounded font-semibold text-primary-foreground/80 text-xs uppercase tracking-widest text-center mb-3"
+        variants={riseIn(reducedMotion, 14)}
+      >
         Featured
-      </p>
-      <div className="overflow-hidden rounded-2xl">
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${index * 100}%)` }}
-        >
-          {featuredItems.map((item, index) => (
-            <div
-              key={item.name}
-              className="w-full flex-shrink-0 rounded-2xl overflow-hidden bg-primary-foreground/10 border border-primary-foreground/20 aspect-[4/3]"
+      </motion.p>
+      <Swiper
+        modules={[Autoplay, A11y]}
+        onSwiper={setSwiper}
+        onSlideChange={(s) => setActiveIndex(s.realIndex)}
+        loop={total > 1}
+        slidesPerView={1}
+        speed={reducedMotion ? 0 : 500}
+        allowTouchMove={total > 1}
+        autoplay={
+          reducedMotion || total <= 1
+            ? false
+            : {
+                delay: FEATURED_INTERVAL_MS,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
+        }
+        className="overflow-hidden rounded-2xl"
+      >
+        {FEATURED_IMAGE_NAMES.map((src) => (
+          <SwiperSlide key={src}>
+            <motion.div
+              className="w-full rounded-2xl overflow-hidden bg-primary-foreground/10 aspect-[1/1]"
+              variants={scaleIn(reducedMotion)}
             >
               <img
-                src={getFeaturedImageUrl(item, index)}
+                src={src}
                 alt=""
                 className="h-full w-full object-cover object-center"
               />
-            </div>
-          ))}
-        </div>
-      </div>
+            </motion.div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
       {total > 1 && (
-        <div className="flex justify-center gap-2 mt-3">
-          {featuredItems.map((_, i) => (
-            <button
+        <motion.div
+          className="flex justify-center gap-2 mt-3"
+          variants={riseIn(reducedMotion, 10)}
+        >
+          {FEATURED_IMAGE_NAMES.map((_, i) => (
+            <motion.button
               key={i}
-              onClick={() => setIndex(i)}
-              className={`h-1.5 rounded-full transition-all w-6 ${i === index ? "bg-primary-foreground" : "bg-primary-foreground/40"}`}
+              onClick={() => swiper?.slideToLoop(i)}
+              className={`h-1.5 rounded-full transition-all w-6 ${i === activeIndex ? "bg-primary-foreground" : "bg-primary-foreground/40"}`}
               aria-label={`Featured ${i + 1}`}
+              {...playfulHoverTap(reducedMotion)}
             />
           ))}
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
-
-function CategoryBlock({ cat }: { cat: Category }) {
-  return (
-    <div className="mb-6 last:mb-0">
-      <h3 className="text-lg font-script text-primary-foreground mb-2">
-        {cat.title} · <span className="font-arabic">{cat.titleAr}</span>
-      </h3>
-      <div className="space-y-0 border border-primary-foreground/20 rounded-xl overflow-hidden bg-primary-foreground/10">
-        {cat.items.map((item) => (
-          <div key={item.name} className="flex items-center justify-between px-4 py-2.5 border-b border-primary-foreground/10 last:border-0">
-            <span className={`font-semibold text-primary-foreground text-sm ${/[\u0600-\u06FF]/.test(item.name) ? "font-arabic" : "font-rounded"}`}>{item.name}</span>
-            <PriceBadges item={item} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SimpleListBlock({ title, titleAr, items }: { title: string; titleAr: string; items: MenuItem[] }) {
-  return (
-    <div className="mb-6 last:mb-0">
-      <h3 className="text-lg font-script text-primary-foreground mb-2">
-        {title} · <span className="font-arabic">{titleAr}</span>
-      </h3>
-      <div className="space-y-0 border border-primary-foreground/20 rounded-xl overflow-hidden bg-primary-foreground/10">
-        {items.map((item) => (
-          <div key={item.name} className="flex items-center justify-between px-4 py-2.5 border-b border-primary-foreground/10 last:border-0">
-            <span className={`font-semibold text-primary-foreground text-sm ${/[\u0600-\u06FF]/.test(item.name) ? "font-arabic" : "font-rounded"}`}>{item.name}</span>
-            <PriceBadges item={item} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ───────── MAIN COMPONENT ───────── */
 
 const MenuSection = () => {
+  const reducedMotion = useReducedMotion();
+
   return (
-    <section id="menu" className="bg-primary py-16 md:py-24 relative overflow-hidden">
-      {/* Bright top line – stands out from menu */}
+    <motion.section
+      id="menu"
+      className="bg-primary py-16 md:py-24 relative overflow-hidden"
+      initial="hidden"
+      whileInView="visible"
+      viewport={sectionViewport}
+      variants={sectionStagger(reducedMotion, 0.06)}
+    >
       <div
         className="absolute top-0 left-0 right-0 z-20 h-5 w-full"
         style={{
@@ -162,72 +129,69 @@ const MenuSection = () => {
           boxShadow: "0 2px 8px rgba(255,255,255,0.3)",
         }}
       />
-      {/* Palm trees – top of section, wind sway, whiter */}
       <div className="absolute top-0 left-0 -translate-x-1/3 sm:-translate-x-1/4 md:-translate-x-1/6 pointer-events-none z-[1]">
-        <img src={palmTree} alt="" className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-auto opacity-50 md:opacity-60 animate-sway-wind drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [filter:brightness(0)_invert(1)]" />
+        <img
+          src={palmTree}
+          alt=""
+          className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-auto opacity-50 md:opacity-60 animate-sway-wind drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [filter:brightness(0)_invert(1)]"
+        />
       </div>
       <div className="absolute top-0 right-0 translate-x-1/3 sm:translate-x-1/4 md:translate-x-1/6 pointer-events-none z-[1] -scale-x-100">
-        <img src={palmTree} alt="" className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-auto opacity-50 md:opacity-60 animate-sway-wind-slow drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [filter:brightness(0)_invert(1)]" />
+        <img
+          src={palmTree}
+          alt=""
+          className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-auto opacity-50 md:opacity-60 animate-sway-wind-slow drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [filter:brightness(0)_invert(1)]"
+        />
       </div>
       <WarpedCheckerboard invert />
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-8">
-          <h2 className="font-script text-4xl md:text-6xl !text-primary-foreground mb-3">Menu Drinkat</h2>
-          <p className="font-rounded font-semibold text-primary-foreground/80 uppercase tracking-[0.2em] text-sm">
+        <motion.div
+          className="text-center mb-8"
+          variants={riseIn(reducedMotion, 20)}
+        >
+          <motion.h2
+            className="font-script text-4xl md:text-6xl !text-primary-foreground mb-3"
+            {...playfulHoverTap(reducedMotion)}
+          >
+            Menu Drinkat
+          </motion.h2>
+          {/* <motion.p
+            className="font-rounded font-semibold text-primary-foreground/80 uppercase tracking-[0.2em] text-sm"
+            variants={riseIn(reducedMotion, 14)}
+          >
             Made fresh, served with a smile
-          </p>
-        </div>
+          </motion.p> */}
+        </motion.div>
 
         <FeaturedCarousel />
 
-        <h3 className="font-rounded font-bold text-primary-foreground/90 text-sm uppercase tracking-widest text-center mb-6">
-          Full menu
-        </h3>
+        <motion.h3
+          className="font-rounded font-bold text-primary-foreground/90 text-sm uppercase tracking-widest text-center mb-6"
+          variants={riseIn(reducedMotion, 16)}
+        >
+          Browse by category
+        </motion.h3>
 
-        {/* Mobile: full menu visible (no accordion). Desktop: 2-col grid */}
-        <div className="md:hidden space-y-8">
-          <div>
-            <h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2 animate-category-shake">
-              <CupSoda className="w-5 h-5" /> Drinks
-            </h4>
-            {drinkCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} />
-            ))}
-          </div>
-          <div>
-            <h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2 animate-category-shake">
-              <Beef className="w-5 h-5" /> Food
-            </h4>
-            {foodCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} />
-            ))}
-            <SimpleListBlock title="Extras" titleAr="أشياء زيادة" items={extras} />
-            <SimpleListBlock title="Sides" titleAr="أشياء سوفت" items={sides} />
-          </div>
-        </div>
+        <motion.div
+          className="rounded-3xl bg-white/95 shadow-lg px-4 py-8 md:px-8 md:py-10 max-w-6xl mx-auto"
+          variants={riseIn(reducedMotion, 12)}
+        >
+          <CategoryGrid categories={allCategories} embedded />
+        </motion.div>
 
-        <div className="hidden md:grid md:grid-cols-2 gap-x-10 gap-y-8 max-w-5xl mx-auto">
-          <div>
-            <h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2 animate-category-shake">
-              <CupSoda className="w-5 h-5" /> Drinks
-            </h4>
-            {drinkCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} />
-            ))}
-          </div>
-          <div>
-            <h4 className="font-script text-xl text-primary-foreground mb-4 flex items-center gap-2 animate-category-shake">
-              <Beef className="w-5 h-5" /> Food
-            </h4>
-            {foodCategories.map((cat) => (
-              <CategoryBlock key={cat.id} cat={cat} />
-            ))}
-            <SimpleListBlock title="Extras" titleAr="أشياء زيادة" items={extras} />
-            <SimpleListBlock title="Sides" titleAr="أشياء سوفت" items={sides} />
-          </div>
-        </div>
+        <motion.p
+          className="text-center mt-8"
+          variants={riseIn(reducedMotion, 12)}
+        >
+          <Link
+            to="/menu"
+            className="font-rounded font-semibold text-primary-foreground/90 text-sm uppercase tracking-widest underline underline-offset-4 hover:text-primary-foreground transition-colors"
+          >
+            View full menu page
+          </Link>
+        </motion.p>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

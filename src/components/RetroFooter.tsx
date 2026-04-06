@@ -1,6 +1,14 @@
 import RetroBorder from "./RetroBorder";
 import drinkatLogo from "@/assets/drinkat-logo.png";
 import WarpedCheckerboard from "./WarpedCheckerboard";
+import { Link } from "react-router-dom";
+
+const footerLinks: { label: string; to: string }[] = [
+  { label: "Home", to: "/#home" },
+  { label: "Menu", to: "/menu" },
+  { label: "About", to: "/#about" },
+  { label: "Visit Us", to: "/#visit-us" },
+];
 
 const RetroFooter = () => {
   return (
@@ -12,19 +20,19 @@ const RetroFooter = () => {
         <div className="my-8">
           <img src={drinkatLogo} alt="Drinkat logo" className="h-16 w-auto mx-auto" />
           <p className="text-primary/60 text-sm mt-2 tracking-wider uppercase">
-            <span className="font-arabic">درينك ناو</span> <span className="font-rounded">— Drink Now since 2019</span>
+            {/* <span className="font-arabic">درينك ناو</span> <span className="font-rounded">— Drink Now since 2019</span> */}
           </p>
         </div>
 
-        <div className="flex justify-center gap-8 mb-8">
-          {["Home", "Menu", "About", "Visit Us"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase().replace(" ", "-")}`}
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-8">
+          {footerLinks.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
               className="font-rounded font-semibold text-primary/70 text-sm uppercase tracking-wide hover:text-primary transition-colors"
             >
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </div>
 
